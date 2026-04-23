@@ -19,8 +19,14 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import sys
 from pathlib import Path
 from typing import List
+
+# Allow `python3 stage_II/kv_cli.py ...` from anywhere: make KORAL/ importable.
+_KORAL_DIR = Path(__file__).resolve().parent.parent
+if str(_KORAL_DIR) not in sys.path:
+    sys.path.insert(0, str(_KORAL_DIR))
 
 from stage_II.config import Stage2Config, resolve_path
 from stage_II.kv_pipeline import KVStage2Runner, TASKS
@@ -84,7 +90,7 @@ def main():
     else:
         raise SystemExit("Provide --input or (--adapter and --adapter_input).")
 
-    cfg = Stage2Config(temperature=args.temperature, max_tokens=args.max_tokens)
+    cfg = Stage2Config(repo_root=_KORAL_DIR, temperature=args.temperature, max_tokens=args.max_tokens)
     runner = KVStage2Runner(
         cfg=cfg,
         llm_backend=args.llm_backend,

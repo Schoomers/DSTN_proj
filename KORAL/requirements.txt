@@ -1,0 +1,6 @@
+# KORAL Stage I + II runtime dependencies
+numpy>=1.26
+pandas>=2.0
+rdflib>=7.0
+requests>=2.31
+pypdf>=4.0

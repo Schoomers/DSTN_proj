@@ -47,11 +47,20 @@ Produce rows in the schema above from common sources:
 
 ## Running
 
-From repo root (so `stage_II` is importable as a package) — typically `~/Desktop/Code/DSTN_Groupproj/KORAL`:
+The CLI can be launched two ways:
+
+- **As a package (`python3 -m stage_II.kv_cli …`)** — requires cwd to be `KORAL/` so that `stage_II` is importable.
+- **As a direct script (`python3 KORAL/stage_II/kv_cli.py …`)** — works from any cwd; the script auto-adds `KORAL/` to `sys.path` and anchors run outputs to `KORAL/stage_II/runs/`.
+
+Activate the venv first:
+```bash
+source /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL/venv/bin/activate
+```
 
 **Dry run (no LLM) — validates plumbing only:**
 ```bash
-python -m stage_II.kv_cli \
+cd /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL
+python3 -m stage_II.kv_cli \
   --input stage_II/examples/kv_sample.jsonl \
   --llm_backend none \
   --out_name kv_dryrun
@@ -59,7 +68,8 @@ python -m stage_II.kv_cli \
 
 **Local Ollama (offline; use same model as Stage 1):**
 ```bash
-python -m stage_II.kv_cli \
+cd /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL
+python3 -m stage_II.kv_cli \
   --input stage_II/examples/kv_sample.jsonl \
   --llm_backend ollama \
   --model llama3.1:8b \
@@ -69,7 +79,8 @@ python -m stage_II.kv_cli \
 **OpenAI (requires `OPENAI_API_KEY`):**
 ```bash
 export OPENAI_API_KEY=sk-...
-python -m stage_II.kv_cli \
+cd /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL
+python3 -m stage_II.kv_cli \
   --input stage_II/examples/kv_sample.jsonl \
   --llm_backend openai \
   --model gpt-4o \
@@ -78,10 +89,18 @@ python -m stage_II.kv_cli \
 
 **From a MQSim run:**
 ```bash
-python -m stage_II.kv_cli \
+cd /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL
+python3 -m stage_II.kv_cli \
   --adapter mqsim --adapter_input ../MQSim/out_dir \
   --llm_backend ollama --model llama3.1:8b \
   --out_name kv_mqsim_run1
+```
+
+**Running from anywhere** (no `cd` needed):
+```bash
+python3 /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL/stage_II/kv_cli.py \
+  --input /Users/sahilmaheshwari/Desktop/Code/DSTN_Groupproj/KORAL/stage_II/examples/kv_sample.jsonl \
+  --llm_backend none --out_name kv_dryrun
 ```
 
 ## Outputs
