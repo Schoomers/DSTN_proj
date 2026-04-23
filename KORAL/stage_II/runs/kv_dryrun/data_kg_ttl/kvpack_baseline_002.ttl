@@ -1,0 +1,242 @@
+@prefix koral: <http://example.org/koral-data#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002> a koral:KVSample ;
+    koral:access_skew 8e-01 ;
+    koral:cmt_eviction_rate 2.1e+01 ;
+    koral:cmt_hit_rate 9.8e-01 ;
+    koral:cmt_size_entries 6.5536e+04 ;
+    koral:gc_overhead_pct 3e+00 ;
+    koral:hasDevice <http://example.org/koral-data#sample/kvpack_baseline_002/device> ;
+    koral:hasFrame <http://example.org/koral-data#sample/kvpack_baseline_002/frame/cmt_eviction_rate>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/cmt_hit_rate>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/gc_overhead_pct>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/inline_ratio>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/inline_to_regular_rate>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/mapping_entry_churn>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/read_amplification>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/read_latency_p50_us>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/read_latency_p99_us>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/tail_latency_p999_us>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/throughput_kops>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/translation_page_pressure>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/value_size_bytes>,
+        <http://example.org/koral-data#sample/kvpack_baseline_002/frame/write_amplification> ;
+    koral:inline_ratio 8.4e-01 ;
+    koral:inline_to_regular_rate 1.1e+01 ;
+    koral:key_size_bytes 1.6e+01 ;
+    koral:mapping_entry_churn 2.1e+02 ;
+    koral:read_amplification 1e+00 ;
+    koral:read_latency_p50_us 5.5e+01 ;
+    koral:read_latency_p99_us 1.51e+02 ;
+    koral:read_write_ratio 9e-01 ;
+    koral:sampleId "kvpack_baseline_002" ;
+    koral:tail_latency_p999_us 2.94e+02 ;
+    koral:throughput_kops 1.12e+02 ;
+    koral:translation_page_pressure 1.4e-01 ;
+    koral:update_intensity 1e-01 ;
+    koral:value_size_bytes 2.56e+02 ;
+    koral:write_amplification 1.2e+00 .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/device> a koral:KVDevice ;
+    koral:capacity_gb 9.6e+02 ;
+    koral:interface "NVMe" ;
+    koral:kv_ftl "KVPack" ;
+    koral:model "PM983-KV" ;
+    koral:vendor "Samsung" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/cmt_eviction_rate> a koral:AttributeFrame ;
+    koral:attribute "cmt_eviction_rate" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/CMTHitRateDynamics> ;
+    koral:max 2.2e+01 ;
+    koral:median 2.05e+01 ;
+    koral:min 1.8e+01 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 2.2e+01 ;
+    koral:slope 8.333333e-02 ;
+    koral:unit "entries/sec" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/cmt_hit_rate> a koral:AttributeFrame ;
+    koral:attribute "cmt_hit_rate" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/CMTHitRateDynamics> ;
+    koral:max 9.8e-01 ;
+    koral:median 9.8e-01 ;
+    koral:min 9.7e-01 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 9.8e-01 ;
+    koral:slope 7.506478e-17 ;
+    koral:unit "ratio" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/gc_overhead_pct> a koral:AttributeFrame ;
+    koral:attribute "gc_overhead_pct" ;
+    koral:changepoint_idx 1 ;
+    koral:coverage 1e+00 ;
+    koral:max 3e+00 ;
+    koral:median 3e+00 ;
+    koral:min 3e+00 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 3e+00 ;
+    koral:slope 0e+00 ;
+    koral:unit "pct" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/inline_ratio> a koral:AttributeFrame ;
+    koral:attribute "inline_ratio" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/InlineRatio> ;
+    koral:max 8.6e-01 ;
+    koral:median 8.5e-01 ;
+    koral:min 8.4e-01 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 8.6e-01 ;
+    koral:slope -7.142857e-04 ;
+    koral:unit "ratio" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/inline_to_regular_rate> a koral:AttributeFrame ;
+    koral:attribute "inline_to_regular_rate" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/InlineToRegularTransition> ;
+    koral:max 1.4e+01 ;
+    koral:median 1.15e+01 ;
+    koral:min 1e+01 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 1.365e+01 ;
+    koral:slope -1.309524e-01 ;
+    koral:unit "events/sec" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/mapping_entry_churn> a koral:AttributeFrame ;
+    koral:attribute "mapping_entry_churn" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/MappingEntryChurn> ;
+    koral:max 2.15e+02 ;
+    koral:median 2.025e+02 ;
+    koral:min 1.9e+02 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 2.1325e+02 ;
+    koral:slope 4.166667e-01 ;
+    koral:unit "entries/sec" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/read_amplification> a koral:AttributeFrame ;
+    koral:attribute "read_amplification" ;
+    koral:changepoint_idx 1 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/ReadAmplification> ;
+    koral:max 1e+00 ;
+    koral:median 1e+00 ;
+    koral:min 1e+00 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 1e+00 ;
+    koral:slope 1.125972e-16 ;
+    koral:unit "x" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/read_latency_p50_us> a koral:AttributeFrame ;
+    koral:attribute "read_latency_p50_us" ;
+    koral:changepoint_idx 1 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency> ;
+    koral:max 5.6e+01 ;
+    koral:median 5.5e+01 ;
+    koral:min 5.5e+01 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 5.6e+01 ;
+    koral:slope -3.571429e-02 ;
+    koral:unit "us" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/read_latency_p99_us> a koral:AttributeFrame ;
+    koral:attribute "read_latency_p99_us" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency> ;
+    koral:max 1.53e+02 ;
+    koral:median 1.505e+02 ;
+    koral:min 1.48e+02 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 1.5265e+02 ;
+    koral:slope 1.190476e-01 ;
+    koral:unit "us" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/tail_latency_p999_us> a koral:AttributeFrame ;
+    koral:attribute "tail_latency_p999_us" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency> ;
+    koral:max 2.98e+02 ;
+    koral:median 2.915e+02 ;
+    koral:min 2.85e+02 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 2.9695e+02 ;
+    koral:slope 5.357143e-01 ;
+    koral:unit "us" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/throughput_kops> a koral:AttributeFrame ;
+    koral:attribute "throughput_kops" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/Throughput> ;
+    koral:max 1.13e+02 ;
+    koral:median 1.11e+02 ;
+    koral:min 1.09e+02 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 1.1265e+02 ;
+    koral:slope 2.380952e-01 ;
+    koral:unit "KOPS" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/translation_page_pressure> a koral:AttributeFrame ;
+    koral:attribute "translation_page_pressure" ;
+    koral:changepoint_idx 2 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/TranslationPagePressure> ;
+    koral:max 1.6e-01 ;
+    koral:median 1.5e-01 ;
+    koral:min 1.4e-01 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 1.6e-01 ;
+    koral:slope -7.142857e-04 ;
+    koral:unit "ratio" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/value_size_bytes> a koral:AttributeFrame ;
+    koral:attribute "value_size_bytes" ;
+    koral:changepoint_idx 1 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/ValueSize> ;
+    koral:max 2.56e+02 ;
+    koral:median 2.56e+02 ;
+    koral:min 2.56e+02 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 2.56e+02 ;
+    koral:slope 2.882487e-14 ;
+    koral:unit "bytes" .
+
+<http://example.org/koral-data#sample/kvpack_baseline_002/frame/write_amplification> a koral:AttributeFrame ;
+    koral:attribute "write_amplification" ;
+    koral:changepoint_idx 1 ;
+    koral:coverage 1e+00 ;
+    koral:maps_to <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/WriteAmplification> ;
+    koral:max 1.2e+00 ;
+    koral:median 1.2e+00 ;
+    koral:min 1.2e+00 ;
+    koral:n 8 ;
+    koral:outliers 0 ;
+    koral:p95 1.2e+00 ;
+    koral:slope 9.383097e-17 ;
+    koral:unit "x" .
+

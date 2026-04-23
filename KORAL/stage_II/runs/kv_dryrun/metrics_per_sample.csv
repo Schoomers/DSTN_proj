@@ -1,0 +1,9 @@
+sample_id,task,FiP,CFV
+kvpack_cmt_pressure_001,diagnose,0.0,
+kvpack_cmt_pressure_001,attribute,0.0,
+kvpack_cmt_pressure_001,prescribe,0.0,
+kvpack_cmt_pressure_001,whatif,,0.0
+kvpack_baseline_002,diagnose,0.0,
+kvpack_baseline_002,attribute,0.0,
+kvpack_baseline_002,prescribe,0.0,
+kvpack_baseline_002,whatif,,0.0

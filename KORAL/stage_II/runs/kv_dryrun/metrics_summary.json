@@ -1,0 +1,18 @@
+{
+  "diagnose": {
+    "n": 2,
+    "FiP": 0.0
+  },
+  "attribute": {
+    "n": 2,
+    "FiP": 0.0
+  },
+  "prescribe": {
+    "n": 2,
+    "FiP": 0.0
+  },
+  "whatif": {
+    "n": 2,
+    "CFV": 0.0
+  }
+}
