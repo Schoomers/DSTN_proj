@@ -46,6 +46,9 @@ def _run_adapter(kind: str, path: Path) -> List[dict]:
         if path.suffix.lower() == ".jsonl":
             return parse_kvpack_jsonl(path)
         return parse_kvpack_json(path)
+    if kind == "twitter":
+        from stage_II.adapters.twitter_trace import parse_twitter_cluster
+        return parse_twitter_cluster(path)
     raise ValueError(f"Unknown --adapter kind: {kind}")
 
 
@@ -53,8 +56,8 @@ def main():
     ap = argparse.ArgumentParser(description="KORAL Stage II — KV-SSD diagnosis pipeline")
     ap.add_argument("--input", type=str, required=False,
                     help="Path to a JSONL/CSV/JSON of KV telemetry rows.")
-    ap.add_argument("--adapter", type=str, choices=["mqsim", "rocksdb", "kvpack"],
-                    help="Use an adapter to convert a simulator/log file into KV telemetry rows first.")
+    ap.add_argument("--adapter", type=str, choices=["mqsim", "rocksdb", "kvpack", "twitter"],
+                    help="Use an adapter to convert a simulator/log/trace file into KV telemetry rows first.")
     ap.add_argument("--adapter_input", type=str,
                     help="Source file/dir for the chosen --adapter.")
     ap.add_argument("--tasks", type=str, default=",".join(TASKS),

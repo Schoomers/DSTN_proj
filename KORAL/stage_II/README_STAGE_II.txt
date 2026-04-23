@@ -35,7 +35,7 @@ How to run (per-sample)
    export OPENAI_API_KEY="sk-..."
 
 3) Run:
-   python -m stage_II.cli \
+   python3 -m stage_II.cli \
      --dataset_type SMART_ALIBABA \
      --input_csv dataset/alibaba/test_data/smart.csv \
      --tasks predictive,descriptive,prescriptive,whatif \

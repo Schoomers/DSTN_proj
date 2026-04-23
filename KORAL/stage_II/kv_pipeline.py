@@ -19,6 +19,12 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import pandas as pd
 
+try:
+    from tqdm import tqdm
+except ImportError:  # graceful fallback
+    def tqdm(it, **_):
+        return it
+
 from stage_II.config import Stage2Config, resolve_path
 from stage_II.features.kv import (
     build_kv_ir,
@@ -193,6 +199,8 @@ class KVStage2Runner:
         metric_rows: List[Dict[str, Any]] = []
 
         rng = seed
+        total_calls = max(1, len(rows) * len(tasks))
+        pbar = tqdm(total=total_calls, desc="KV Stage 2", unit="call", dynamic_ncols=True)
         for idx, row in enumerate(rows):
             sample_id = str(row.get("sample_id") or row.get("window_id") or row.get("id") or f"s{idx}")
 
@@ -227,6 +235,7 @@ class KVStage2Runner:
             }
 
             for task in tasks:
+                pbar.set_postfix_str(f"{sample_id} · {task}", refresh=False)
                 if task == "diagnose":
                     user = diagnose_user_prompt(sample_payload)
                 elif task == "attribute":
@@ -278,7 +287,9 @@ class KVStage2Runner:
                         m["RL"] = rouge_l_f1(str(gen), str(row[ref_key]))
                 metric_rows.append(m)
 
+                pbar.update(1)
                 time.sleep(0.1)
+        pbar.close()
 
         append_jsonl(responses_jsonl, responses_out)
         mdf = pd.DataFrame(metric_rows)

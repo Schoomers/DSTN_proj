@@ -4,3 +4,8 @@ pandas>=2.0
 rdflib>=7.0
 requests>=2.31
 pypdf>=4.0
+# Legacy PyPDF2 kept for Stage 1 pipeline compatibility (it imports `PyPDF2` by name).
+PyPDF2>=3.0
+tqdm>=4.66
+# Used by stage_I pipeline as an OpenAI-compatible client to talk to Ollama.
+openai>=1.0
