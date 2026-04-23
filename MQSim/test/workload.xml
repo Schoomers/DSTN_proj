@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MQSim_IO_Scenarios>
+
+    <IO_Scenario>
+
+        <Device_Level_Data_Caching_Mode>WRITE_READ_CACHE</Device_Level_Data_Caching_Mode>
+
+        <Channel_IDs>0,1,2,3</Channel_IDs>
+
+        <IO_Flow>
+
+            <Priority_Class>HIGH</Priority_Class>
+
+            <Device_Level_Data_Caching_Mode>WRITE_READ_CACHE</Device_Level_Data_Caching_Mode>
+
+            <Start_LBA>0</Start_LBA>
+            <End_LBA>100000</End_LBA>
+
+            <IO_Size>4096</IO_Size>
+
+            <Read_Ratio>100</Read_Ratio>
+
+            <IOPS>10000</IOPS>
+
+            <Queue_Depth>32</Queue_Depth>
+
+        </IO_Flow>
+
+    </IO_Scenario>
+
+</MQSim_IO_Scenarios>

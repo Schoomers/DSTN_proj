@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Execution_Parameter_Set>
+
+    <HostInterface_Type>NVME</HostInterface_Type>
+    <IO_Queue_Depth>64</IO_Queue_Depth>
+    <Queue_Fetch_Size>32</Queue_Fetch_Size>
+
+    <Flash_Channel_Count>4</Flash_Channel_Count>
+    <Chip_No_Per_Channel>2</Chip_No_Per_Channel>
+    <Die_No_Per_Chip>2</Die_No_Per_Chip>
+    <Plane_No_Per_Die>2</Plane_No_Per_Die>
+
+    <Block_No_Per_Plane>1024</Block_No_Per_Plane>
+    <Page_No_Per_Block>256</Page_No_Per_Block>
+
+    <Page_Capacity>16384</Page_Capacity>
+    <Page_Metadat_Capacity>128</Page_Metadat_Capacity>
+
+    <Flash_Technology>MLC</Flash_Technology>
+
+    <Page_Read_Latency_LSB>25000</Page_Read_Latency_LSB>
+    <Page_Program_Latency_LSB>200000</Page_Program_Latency_LSB>
+
+    <Block_Erase_Latency>3000000</Block_Erase_Latency>
+
+</Execution_Parameter_Set>

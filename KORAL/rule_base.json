@@ -1,0 +1,319 @@
+{
+    "rule_base_version": "0.4.0",
+    "ontology_ref": "ssd-taxonomy-v1",
+    "taxonomy_source": "taxonomy.json",
+    "principles": {
+      "micrograph_frame": "Every emitted node uses a consistent {id,type,props,window,method,confidence,provenance} schema.",
+      "metrics_not_data": "Concepts like latency/throughput are metrics derived from telemetry; they are summarized as MetricFrames and never treated as standalone data sources.",
+      "granularity": ["per_drive_per_day","per_drive_per_n_day","fleet_per_day","fleet_per_n_day"]
+    },
+  
+    "categories": {
+      "static_data": {
+        "includes_taxonomy_paths": [
+          "SSD.PhysicalHardwareAndArchitecture.InterfaceType",
+          "SSD.PhysicalHardwareAndArchitecture.PCIe",
+          "SSD.PhysicalHardwareAndArchitecture.FormFactor",
+          "SSD.PhysicalHardwareAndArchitecture.FlashTechnology",
+          "SSD.PhysicalHardwareAndArchitecture.Controller",
+          "SSD.PhysicalHardwareAndArchitecture.CacheAndBuffers",
+          "SSD.PhysicalHardwareAndArchitecture.PowerLossProtection",
+          "SSD.InternalFirmwareAndLogic.*",
+          "SSD.ConfigurationAndAdvancedParadigms.*",
+          "SSD.EcosystemAndIntegrationContext.Interconnects",
+          "SSD.EnvironmentalAndOperationalContext.DeploymentEnvironment"
+        ],
+        "notes": "Values change rarely; passthrough with light normalization and provenance."
+      },
+      "dynamic_data": {
+        "includes_taxonomy_paths": [
+          "SSD.EnvironmentalAndOperationalContext.ExternalFactors.*",
+          "SSD.EnvironmentalAndOperationalContext.WorkloadProfile.*",
+          "SSD.EnvironmentalAndOperationalContext.HostSystem.*",
+          "SSD.MetricsHealthAndState.SMARTAttribute.*",
+          "SSD.MetricsHealthAndState.Performance.*",
+          "SSD.ModelingTimeAndStateHistory.*"
+        ],
+        "notes": "Streams or day-level observations; summarized statistically and semantically (trends, regimes, episodes, uncertainty)."
+      },
+      "not_data_concepts": {
+        "metrics": [
+          "SSD.MetricsHealthAndState.Performance.IOPS",
+          "SSD.MetricsHealthAndState.Performance.Throughput",
+          "SSD.MetricsHealthAndState.Performance.Average Latency",
+          "SSD.MetricsHealthAndState.Performance.99th Percentile Latency",
+          "SSD.MetricsHealthAndState.Endurance.*",
+          "SSD.MetricsHealthAndState.Reliability.*"
+        ],
+        "handling": "Treat these as named metrics within MetricFrame summaries; do not define separate data-source rules."
+      }
+    },
+  
+    "function_library": {
+      "robust_stats": "median, iqr, p05, p95, mean, std, mad, min, max (winsorize@1%)",
+      "mk_trend": "Mann-Kendall trend: increasing|decreasing|stable + p_value",
+      "roc": "rate of change per day or per power-on-hour",
+      "accel": "second derivative over window; acceleration of roc",
+      "hampel_outliers": "rolling-MAD outlier count and magnitude",
+      "changepoints": "binary segmentation for mean/variance shifts; timestamps",
+      "stl": "seasonality strength (daily/weekly) and remainder volatility",
+      "matrix_profile": "top motifs/discords intervals for load/error series",
+      "coverage": "observed_samples / expected_samples; data_freshness",
+      "exposure": "time over thresholds (e.g., temp_warn/temp_crit)",
+      "spearman": "rank correlation rho,p",
+      "allan": "Allan variance summary for sensor stability",
+      "hurst": "Hurst exponent for long-range dependence",
+      "hazard": "calibrated logistic/cox risk from feature vector",
+      "uncertainty": "min(coverage, 1 - outlier_rate) downweighted by imputation"
+    },
+  
+    "frames": {
+      "Asset": {"id": "Disk/{serial}", "type": "Asset"},
+      "Firmware": {"id": "FW/{vendor}/{model}/{fw}", "type": "Firmware"},
+      "Config": {"id": "Cfg/{asset}", "type": "Config"},
+      "Observation": {"id": "Obs/{asset}/{ts}/{scope}", "type": "Observation"},
+      "AttributeFrame": {"id": "Attr/{asset}/{attr}/{ts}/{scope}", "type": "AttributeFrame"},
+      "MetricFrame": {"id": "Met/{asset}/{metric}/{ts}/{scope}", "type": "MetricFrame"},
+      "WorkloadFrame": {"id": "Work/{asset}/{ts}/{scope}", "type": "WorkloadFrame"},
+      "EnvFrame": {"id": "Env/{asset_or_site}/{ts}/{scope}", "type": "EnvFrame"},
+      "TraceFrame": {"id": "Trace/{asset}/{ts}/{scope}/{kind}", "type": "TraceFrame"},
+      "Distribution": {"id": "Dist/{cohort}/{ts}/{scope}/{metric}", "type": "Distribution"},
+      "HealthState": {"id": "Health/{asset}/{ts}", "type": "HealthState"},
+      "Episode": {"id": "Episode/{asset_or_cohort}/{start}-{end}", "type": "Episode"},
+      "DataQuality": {"id": "DQ/{asset}/{ts}/{scope}", "type": "DataQuality"}
+    },
+  
+    "granularity_defaults": {
+      "per_drive_per_day": {"window": "1d"},
+      "per_drive_per_n_day": {"window": "nd"},
+      "fleet_per_day": {"window": "1d"},
+      "fleet_per_n_day": {"window": "nd"}
+    },
+  
+    "rules": {
+      "static": [
+        {
+          "id": "S1-ASSET-PASSTHROUGH",
+          "when": {"source_paths": ["SSD.PhysicalHardwareAndArchitecture.*"]},
+          "emit": [
+            {
+              "frame": "Asset",
+              "props_map": {
+                "vendor": "{Controller.Vendor}",
+                "model": "{Controller.Model}",
+                "interface": "{InterfaceType}",
+                "pcie_gen": "{PCIe}",
+                "form_factor": "{FormFactor}",
+                "cell_type": "{FlashTechnology.CellType}",
+                "nand_structure": "{FlashTechnology.Structure}",
+                "layer_count": "{FlashTechnology.Manufacturing.LayerCount}",
+                "lithography": "{FlashTechnology.Manufacturing.LithographyNode}",
+                "cache_features": "{CacheAndBuffers}",
+                "plp": "{PowerLossProtection}"
+              },
+              "edges": [
+                "HAS_MODEL(model)",
+                "USES_INTERFACE(interface)",
+                "HAS_FLASH(cell_type)"
+              ],
+              "method": "passthrough_normalize",
+              "confidence": 1.0
+            }
+          ]
+        },
+        {
+          "id": "S2-FIRMWARE-PASSTHROUGH",
+          "when": {"source_paths": ["SSD.InternalFirmwareAndLogic.*"]},
+          "emit": [
+            {
+              "frame": "Firmware",
+              "props_map": {
+                "wear_leveling": "{MediaManagement.Wear Leveling}",
+                "garbage_collection": "{MediaManagement.Garbage Collection}",
+                "over_provisioning": "{MediaManagement.Over-Provisioning}",
+                "ecc": "{DataPath.Error Correction (ECC)}",
+                "rain": "{DataPath.RAID-in-Flash (RAIN)}",
+                "trim": "{Maintenance.TRIM}",
+                "scrub": "{Maintenance.Background Scrubbing}",
+                "thermal_policy": "{ThermalManagement.*}"
+              },
+              "edges": ["CONFIGURED_FOR->Asset"],
+              "method": "passthrough_normalize",
+              "confidence": 1.0
+            }
+          ]
+        },
+        {
+          "id": "S3-CONFIG-PASSTHROUGH",
+          "when": {"source_paths": ["SSD.ConfigurationAndAdvancedParadigms.*","SSD.EcosystemAndIntegrationContext.Interconnects","SSD.EnvironmentalAndOperationalContext.DeploymentEnvironment"]},
+          "emit": [
+            {
+              "frame": "Config",
+              "props_map": {
+                "capacity_raw": "{CapacityAndProvisioning.Raw Capacity}",
+                "capacity_usable": "{CapacityAndProvisioning.Usable Capacity}",
+                "over_provisioning": "{CapacityAndProvisioning.Over-Provisioning}",
+                "zns": "{ZonedNamespaces.ZNS}",
+                "computational_storage": "{ComputationalStorage.*}",
+                "security": "{Security.*}",
+                "nvme_features": "{NVMeFeatures.*}",
+                "interconnects": "{Interconnects}",
+                "deployment_env": "{DeploymentEnvironment}"
+              },
+              "edges": ["HAS_CONFIG->Asset"],
+              "method": "passthrough_normalize"
+            }
+          ]
+        }
+      ],
+  
+      "dynamic": {
+        "smart": [
+          {
+            "id": "D1-SMART-ATTR-PER-DRIVE",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["SSD.MetricsHealthAndState.SMARTAttribute.*"]},
+            "compute": ["robust_stats","roc","accel","mk_trend","hampel_outliers","changepoints","coverage"],
+            "emit": [
+              {
+                "frame": "AttributeFrame",
+                "props": ["attr","unit","p05","p50","p95","mean","std","mad","min","max","roc_per_day","accel","trend","trend_p","spikes","changepoints","threshold_crossings","data_freshness","coverage"],
+                "edges": ["MEASURED_ON->Asset","BELONGS_TO_GROUP(media|interface|thermal|usage)"],
+                "method": "smart_timeseries_v1",
+                "confidence": "{uncertainty}"
+              },
+              {
+                "frame": "DataQuality",
+                "props": ["missing_pct","sensor_stuck","outlier_rate","imputed_method"],
+                "edges": ["APPLIES_TO->AttributeFrame"]
+              }
+            ],
+            "health_hints": [
+              {"if": "attr in ['Media Errors','Reported Uncorrectable Errors','Uncorrectable Sector Count (Offline)'] && trend=='increasing' && p50>0", "emit": {"frame":"HealthState","props":{"state":"degrading","score":0.7,"reason":"error_rate_trend"}}},
+              {"if": "attr=='Percentage Used' && roc_per_day>0.3", "emit": {"frame":"HealthState","props":{"state":"degrading","score":0.6,"reason":"accelerated_wear"}}}
+            ]
+          },
+          {
+            "id": "D2-SMART-ATTR-NDAY",
+            "scope": "per_drive_per_n_day",
+            "when": {"source_paths": ["SSD.MetricsHealthAndState.SMARTAttribute.*"]},
+            "compute": ["robust_stats","roc","mk_trend","changepoints","stl","matrix_profile"],
+            "emit": [
+              {"frame":"AttributeFrame","props":["p05","p50","p95","roc_per_day","trend","trend_p","seasonality_strength","motif_examples","discord_examples"],"method":"smart_nday_v1"}
+            ]
+          },
+          {
+            "id": "D3-SMART-FLEET-DIST",
+            "scope": "fleet_per_day",
+            "when": {"source_paths": ["SSD.MetricsHealthAndState.SMARTAttribute.*"]},
+            "compute": ["robust_stats"],
+            "emit": [
+              {"frame":"Distribution","props":["metric","p01","p10","p50","p90","p99","mean","std","n_assets","coverage"],"edges":["SUMMARIZES->AttributeFrame"],"method":"fleet_distribution"}
+            ]
+          }
+        ],
+  
+        "workload": [
+          {
+            "id": "D4-WORKLOAD-PROFILE",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.WorkloadProfile.*"]},
+            "compute": ["robust_stats","matrix_profile","coverage"],
+            "emit": [
+              {"frame":"WorkloadFrame","props":["bytes_read","bytes_written","read_pct","avg_qd","p95_qd","avg_bs","burstiness_cv","diurnal_score","iops_mean","lat_p99"],"method":"workload_day_v1"}
+            ]
+          },
+          {
+            "id": "D5-WORKLOAD-CHANGE",
+            "scope": "per_drive_per_n_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.WorkloadProfile.*"]},
+            "compute": ["changepoints","stl"],
+            "emit": [{"frame":"Episode","props":["type","start","end","evidence"],"defaults":{"type":"workload-regime-shift"},"method":"episode_from_workload"}]
+          }
+        ],
+  
+        "environment": [
+          {
+            "id": "D6-ENV-EXTERNAL",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.ExternalFactors.*"]},
+            "compute": ["robust_stats","exposure","roc","allan","coverage"],
+            "emit": [{"frame":"EnvFrame","props":["ambient_temp_mean","ambient_temp_p95","humidity_mean","vibration_rms","temp_gradient_max","time_above_warn","time_above_crit"],"method":"env_day_v1"}]
+          },
+          {
+            "id": "D7-ENVxSMART-INTERACTION",
+            "scope": "per_drive_per_n_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.ExternalFactors.*","SSD.MetricsHealthAndState.SMARTAttribute.*"]},
+            "compute": [{"fn":"spearman","params":{"x":"temperature","y":"Media Errors"}},{"fn":"spearman","params":{"x":"temperature","y":"Latency p99"}}],
+            "emit": [{"frame":"Observation","props":["covariation_pairs","rho","p"],"method":"env_smart_interaction"}]
+          }
+        ],
+  
+        "metrics": [
+          {
+            "id": "D8-PERF-METRICS",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["SSD.MetricsHealthAndState.Performance.*"]},
+            "compute": ["robust_stats","mk_trend","roc","hampel_outliers","changepoints","stl","coverage"],
+            "emit": [
+              {"frame":"MetricFrame","props":["metric","unit","p50","p95","mean","std","roc_per_day","trend","trend_p","spikes","changepoints","seasonality_strength"],"method":"metric_timeseries_v1"}
+            ]
+          },
+          {
+            "id": "D9-PERF-FLEET-DIST",
+            "scope": "fleet_per_n_day",
+            "when": {"source_paths": ["SSD.MetricsHealthAndState.Performance.*"]},
+            "compute": ["robust_stats"],
+            "emit": [{"frame":"Distribution","props":["metric","p01","p10","p50","p90","p99","n_assets"],"method":"metric_fleet_distribution"}]
+          }
+        ],
+  
+        "host_system": [
+          {
+            "id": "D10-HOST-VERSION-CHANGES",
+            "scope": "per_drive_per_n_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.HostSystem.*"]},
+            "compute": ["changepoints"],
+            "emit": [{"frame":"Episode","props":["type","start","end","evidence"],"defaults":{"type":"host-change"},"method":"episode_from_host"}]
+          }
+        ],
+  
+        "visual_audio_optional": [
+          {
+            "id": "D11-IMAGE-THERMAL",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.ExternalFactors.Temperature"], "extra_modalities": ["thermal_image"]},
+            "compute": ["exposure"],
+            "emit": [{"frame":"TraceFrame","props":["kind","hotspot_count","hotspot_area_pct","max_temp","p95_temp","persistence"],"defaults":{"kind":"thermal-visual"},"method":"thermal_image_summary"}]
+          },
+          {
+            "id": "D12-AUDIO-VIBRATION",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["SSD.EnvironmentalAndOperationalContext.ExternalFactors.Acoustic Signals","SSD.EnvironmentalAndOperationalContext.ExternalFactors.Vibration"]},
+            "compute": ["robust_stats"],
+            "emit": [{"frame":"TraceFrame","props":["kind","spectral_peaks","spectral_flatness","kurtosis","rms"],"defaults":{"kind":"acoustic-vibration"},"method":"audio_vibe_summary"}]
+          }
+        ],
+  
+        "risk_and_health": [
+          {
+            "id": "D13-RISK-FROM-MULTISOURCE",
+            "scope": "per_drive_per_n_day",
+            "when": {"source_paths": ["SSD.MetricsHealthAndState.SMARTAttribute.*","SSD.EnvironmentalAndOperationalContext.WorkloadProfile.*","SSD.EnvironmentalAndOperationalContext.ExternalFactors.*"]},
+            "compute": [{"fn":"hazard","params":{"features":["Media Errors delta","Percentage Used delta","bytes_written","ambient_temp"]}}],
+            "emit": [{"frame":"HealthState","props":["state","score","reason_codes"],"method":"risk_model_v1","defaults":{"state":"healthy|degrading|failing"}}]
+          }
+        ],
+  
+        "data_quality": [
+          {
+            "id": "D14-MISSINGNESS",
+            "scope": "per_drive_per_day",
+            "when": {"source_paths": ["*"]},
+            "compute": ["coverage"],
+            "emit": [{"frame":"DataQuality","props":["missingness_pattern","coverage","sensor_stuck","clock_skew","outlier_rate","imputed_method"],"method":"dq_v1"}]
+          }
+        ]
+      }
+    }
+  }  

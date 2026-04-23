@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Execution_Parameter_Set>
+
+<HostInterface_Type>NVME</HostInterface_Type>
+<IO_Queue_Depth>64</IO_Queue_Depth>
+<Queue_Fetch_Size>32</Queue_Fetch_Size>
+
+<Flash_Channel_Count>4</Flash_Channel_Count>
+<Chip_No_Per_Channel>1</Chip_No_Per_Channel>
+<Die_No_Per_Chip>1</Die_No_Per_Chip>
+<Plane_No_Per_Die>1</Plane_No_Per_Die>
+
+<Block_No_Per_Plane>256</Block_No_Per_Plane>
+<Page_No_Per_Block>128</Page_No_Per_Block>
+
+<Page_Capacity>4096</Page_Capacity>
+<Page_Metadat_Capacity>128</Page_Metadat_Capacity>
+
+</Execution_Parameter_Set>
