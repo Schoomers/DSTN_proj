@@ -28633,3 +28633,577 @@ ns1:improves a owl:ObjectProperty .
         ns1:E9_Machine_Learning ;
     rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD> .
 
+
+#
+# ============================================================================
+# KV-SSD Ontology Extension (Stage I - KV-SSD papers)
+# Papers:
+#   LKV : LearnedKV (Wang & Du, arXiv:2406.18892v2, 2025)
+#   KVS : KVSSD: Close Integration of LSM Trees and FTL (Wu, Lin, Chang, DATE 2018)
+#   DOT : Dotori: A Key-Value SSD Based KV Store (Duffy et al., PVLDB 2023)
+# ============================================================================
+#
+
+# ---- KV-SSD taxonomy classes (extends SSD taxonomy) ---------------------
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD> a rdfs:Class ;
+    rdfs:label "KV-SSD" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> a rdfs:Class ;
+    rdfs:label "KV-FTL" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/CachedMappingTable> a rdfs:Class ;
+    rdfs:label "Cached Mapping Table (CMT)" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/MappingEntry> a rdfs:Class ;
+    rdfs:label "Mapping Entry" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/TranslationPage> a rdfs:Class ;
+    rdfs:label "Translation Page" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/InlineEntry> a rdfs:Class ;
+    rdfs:label "Inline Entry" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/MappingEntry> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/RegularEntry> a rdfs:Class ;
+    rdfs:label "Regular Entry" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/MappingEntry> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/K2PMapping> a rdfs:Class ;
+    rdfs:label "Key-to-Physical (K2P) Mapping" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> a rdfs:Class ;
+    rdfs:label "KV-SSD Behavioral Concept" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/InlineRatio> a rdfs:Class ;
+    rdfs:label "Inline Ratio" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/MappingEntryChurn> a rdfs:Class ;
+    rdfs:label "Mapping Entry Churn" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/InlineToRegularTransition> a rdfs:Class ;
+    rdfs:label "Inline-to-Regular Transition" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/TranslationPagePressure> a rdfs:Class ;
+    rdfs:label "Translation Page Pressure" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/CMTHitRateDynamics> a rdfs:Class ;
+    rdfs:label "CMT Hit Rate Dynamics" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree> a rdfs:Class ;
+    rdfs:label "LSM-Tree" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LearnedIndex> a rdfs:Class ;
+    rdfs:label "Learned Index" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/BPlusTree> a rdfs:Class ;
+    rdfs:label "B+-Tree Index" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/OAKTree> a rdfs:Class ;
+    rdfs:label "OAK-Tree (Out-of-order Append-only KVSSD B+tree)" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/BPlusTree> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/HashTable> a rdfs:Class ;
+    rdfs:label "Hash-Table KV Index" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/KVSeparation> a rdfs:Class ;
+    rdfs:label "Key-Value Separation" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/Compaction> a rdfs:Class ;
+    rdfs:label "LSM Compaction" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/RemappingCompaction> a rdfs:Class ;
+    rdfs:label "Remapping Compaction" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/Compaction> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection> a rdfs:Class ;
+    rdfs:label "KV-Store Garbage Collection" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/HotColdSeparation> a rdfs:Class ;
+    rdfs:label "Hot-Cold Separation" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/ValueSize> a rdfs:Class ;
+    rdfs:label "Value Size" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/KeySize> a rdfs:Class ;
+    rdfs:label "Key Size" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/ReadWriteRatio> a rdfs:Class ;
+    rdfs:label "Read/Write Ratio" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/AccessSkew> a rdfs:Class ;
+    rdfs:label "Access Skew (Zipfian/Uniform/Latest)" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/WriteAmplification> a rdfs:Class ;
+    rdfs:label "Write Amplification" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/ReadAmplification> a rdfs:Class ;
+    rdfs:label "Read Amplification" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/SpaceAmplification> a rdfs:Class ;
+    rdfs:label "Space Amplification" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency> a rdfs:Class ;
+    rdfs:label "Tail Latency" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/Throughput> a rdfs:Class ;
+    rdfs:label "Throughput" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/ReadModifyWrite> a rdfs:Class ;
+    rdfs:label "Page Read-Modify-Write" ;
+    rdfs:subClassOf <http://example.org/ssd/taxonomy/SSD/KVSSD> .
+
+# ---- New predicates (KV-SSD specific) ----------------------------------
+
+ns1:hasInlineRatio a owl:ObjectProperty ;
+    rdfs:label "has inline-entry ratio" .
+
+ns1:hasMappingEntryChurn a owl:ObjectProperty ;
+    rdfs:label "has mapping-entry churn" .
+
+ns1:hasTranslationPagePressure a owl:ObjectProperty ;
+    rdfs:label "has translation-page pressure" .
+
+ns1:hasKVOperationType a owl:ObjectProperty ;
+    rdfs:label "has KV operation type" .
+
+# ---- Paper metadata ----------------------------------------------------
+
+<http://example.org/paper/LKV> a dcterms:BibliographicResource ;
+    dcterms:title "LearnedKV: Integrating LSM and Learned Index for Superior Performance on Storage" ;
+    dcterms:creator "Wenlong Wang", "David Hung-Chang Du" ;
+    dcterms:identifier "arXiv:2406.18892v2" ;
+    dcterms:date "2025-04-11" .
+
+<http://example.org/paper/KVS> a dcterms:BibliographicResource ;
+    dcterms:title "KVSSD: Close Integration of LSM Trees and Flash Translation Layer for Write-Efficient KV Store" ;
+    dcterms:creator "Sung-Ming Wu", "Kai-Hsiang Lin", "Li-Pin Chang" ;
+    dcterms:identifier "DATE-2018-KVSSD" ;
+    dcterms:date "2018" .
+
+<http://example.org/paper/DOT> a dcterms:BibliographicResource ;
+    dcterms:title "Dotori: A Key-Value SSD Based KV Store" ;
+    dcterms:creator "Carl Duffy", "Jaehoon Shim", "Sang-Hoon Kim", "Jin-Soo Kim" ;
+    dcterms:identifier "PVLDB-16(6)-1560" ;
+    dcterms:date "2023" .
+
+# =====================================================================
+# Paper LKV — LearnedKV
+# =====================================================================
+
+ns1:LKV_E1_LearnedKV a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "LearnedKV" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Tiered KV store: LSM absorbs writes, Learned Index accelerates reads; non-blocking GC-triggered conversion." ;
+    ns1:uses ns1:LKV_E2_LSMTree, ns1:LKV_E3_LearnedIndex, ns1:LKV_E6_KVSeparation,
+        ns1:LKV_E7_ValueLog, ns1:LKV_E8_StaticValueLog, ns1:LKV_E10_Memtable,
+        ns1:LKV_E13_GreedyPLR, ns1:LKV_E14_BloomFilter, ns1:LKV_E21_NonBlockingGCConversion ;
+    ns1:improves ns1:LKV_E17_Throughput ;
+    ns1:affectsTailLatency ns1:LKV_E16_ReadAmplification ;
+    ns1:hasWorkloadProfile ns1:LKV_E18_ZipfianWorkload ;
+    ns1:correlatesWith ns1:LKV_E22_LSMSize .
+
+ns1:LKV_E2_LSMTree a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree>, owl:Thing ;
+    rdfs:label "LSM-Tree" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Write-optimized index; deeper tree increases read latency and compaction cost." ;
+    ns1:improves ns1:LKV_E17_Throughput ;
+    ns1:degrades ns1:LKV_E16_ReadAmplification ;
+    ns1:correlatesWith ns1:LKV_E15_WriteAmplification .
+
+ns1:LKV_E3_LearnedIndex a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LearnedIndex>, owl:Thing ;
+    rdfs:label "Learned Index" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LearnedIndex> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Compact ML-based index over static sorted data; requires stable distribution." ;
+    ns1:improves ns1:LKV_E17_Throughput ;
+    ns1:affectsTailLatency ns1:LKV_E8_StaticValueLog ;
+    ns1:operatesUnder ns1:LKV_E9_GarbageCollection .
+
+ns1:LKV_E4_RocksDB a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "RocksDB" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    ns1:uses ns1:LKV_E2_LSMTree, ns1:LKV_E11_SSTable, ns1:LKV_E12_Compaction .
+
+ns1:LKV_E5_WiscKey a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "WiscKey" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Pioneered KV separation with GC to reclaim outdated entries." ;
+    ns1:uses ns1:LKV_E6_KVSeparation ;
+    ns1:improves ns1:LKV_E15_WriteAmplification .
+
+ns1:LKV_E6_KVSeparation a <http://example.org/ssd/taxonomy/SSD/KVSSD/KVSeparation>, owl:Thing ;
+    rdfs:label "KV Separation" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/KVSeparation> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Stores full KV pairs in an append-only value log; LSM keeps only keys and pointers." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification ;
+    ns1:correlatesWith ns1:LKV_E9_GarbageCollection .
+
+ns1:LKV_E7_ValueLog a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Value Log (vlog)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    ns1:correlatesWith ns1:LKV_E6_KVSeparation, ns1:LKV_E9_GarbageCollection .
+
+ns1:LKV_E8_StaticValueLog a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Static Value Log" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Post-GC immutable region indexed by Learned Index; stable between GC cycles." ;
+    ns1:improves ns1:LKV_E17_Throughput ;
+    ns1:correlatesWith ns1:LKV_E3_LearnedIndex .
+
+ns1:LKV_E9_GarbageCollection a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection>, owl:Thing ;
+    rdfs:label "GC (KV-store)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    ns1:improves ns1:LKV_E16_ReadAmplification ;
+    ns1:degrades ns1:LKV_E17_Throughput ;
+    ns1:correlatesWith ns1:LKV_E21_NonBlockingGCConversion .
+
+ns1:LKV_E10_Memtable a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Memtable" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> .
+
+ns1:LKV_E11_SSTable a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "SSTable" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> .
+
+ns1:LKV_E12_Compaction a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/Compaction>, owl:Thing ;
+    rdfs:label "LSM Compaction" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/Compaction> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Periodic merge that propagates KV pairs down levels; source of first-stage WA." ;
+    ns1:degrades ns1:LKV_E15_WriteAmplification, ns1:LKV_E17_Throughput .
+
+ns1:LKV_E13_GreedyPLR a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LearnedIndex>, owl:Thing ;
+    rdfs:label "Greedy-PLR+" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LearnedIndex> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Piece-wise linear model variant using page-distance error; O(n) build, kB-scale in memory." ;
+    ns1:improves ns1:LKV_E3_LearnedIndex .
+
+ns1:LKV_E14_BloomFilter a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "In-memory Bloom Filter" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Skips LSM lookups for keys not in Memtable; trade: +9.6% read, -5.65% write throughput." ;
+    ns1:improves ns1:LKV_E17_Throughput ;
+    ns1:degrades ns1:LKV_E15_WriteAmplification .
+
+ns1:LKV_E15_WriteAmplification a <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/WriteAmplification>, owl:Thing ;
+    rdfs:label "Write Amplification" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/WriteAmplification> ;
+    dcterms:source <http://example.org/paper/LKV> .
+
+ns1:LKV_E16_ReadAmplification a <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/ReadAmplification>, owl:Thing ;
+    rdfs:label "Read Amplification" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/ReadAmplification> ;
+    dcterms:source <http://example.org/paper/LKV> .
+
+ns1:LKV_E17_Throughput a <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/Throughput>, owl:Thing ;
+    rdfs:label "KV Throughput (KOPS)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/Throughput> ;
+    dcterms:source <http://example.org/paper/LKV> .
+
+ns1:LKV_E18_ZipfianWorkload a <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/AccessSkew>, owl:Thing ;
+    rdfs:label "Zipfian Workload (s=0.99)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/AccessSkew> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    ns1:hasAccessSkew <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/AccessSkew> .
+
+ns1:LKV_E19_Bourbon a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Bourbon" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Learned index bound to SST files (intra-file), not a tiered replacement." ;
+    ns1:uses ns1:LKV_E3_LearnedIndex, ns1:LKV_E2_LSMTree .
+
+ns1:LKV_E20_HashKV a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "HashKV" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    ns1:uses ns1:LKV_E6_KVSeparation .
+
+ns1:LKV_E21_NonBlockingGCConversion a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection>, owl:Thing ;
+    rdfs:label "Non-Blocking GC+Conversion" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Builds new Learned Index during GC without pausing user requests; creates new LSM/vlog for concurrent writes." ;
+    ns1:improves ns1:LKV_E17_Throughput .
+
+ns1:LKV_E22_LSMSize a <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral>, owl:Thing ;
+    rdfs:label "LSM Size (levels/files)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> ;
+    dcterms:source <http://example.org/paper/LKV> ;
+    rdfs:comment "Grows faster than raw KV pair count; 10x dataset raised read-cost 216% and write-cost 44.5%." ;
+    ns1:degrades ns1:LKV_E17_Throughput ;
+    ns1:correlatesWith ns1:LKV_E15_WriteAmplification, ns1:LKV_E16_ReadAmplification .
+
+# =====================================================================
+# Paper KVS — KVSSD (Wu et al., DATE 2018)
+# =====================================================================
+
+ns1:KVS_E1_KVSSD a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "KVSSD (Wu/Lin/Chang)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Close integration of LSM trees and FTL; interacts with host through KV operations." ;
+    ns1:uses ns1:KVS_E2_nLSMTree, ns1:KVS_E4_K2PMapping, ns1:KVS_E14_KVInterface ;
+    ns1:improves ns1:LKV_E15_WriteAmplification, ns1:LKV_E17_Throughput ;
+    ns1:degrades ns1:KVS_E11_ReadModifyWrite, ns1:KVS_E12_CascadingWriteAmplification .
+
+ns1:KVS_E2_nLSMTree a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree>, owl:Thing ;
+    rdfs:label "nLSM-Tree (NAND-flash LSM)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Flash-native LSM that allocates one flash block per SSTable; eliminates page read-modify-write." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification ;
+    ns1:degrades ns1:KVS_E11_ReadModifyWrite .
+
+ns1:KVS_E3_rLSMTree a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree>, owl:Thing ;
+    rdfs:label "rLSM-Tree (Remapping nLSM)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/LSMTree> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "nLSM enhanced with remapping compaction + hot-cold separation; throughput up to 4.47x over LSM." ;
+    ns1:uses ns1:KVS_E6_RemappingCompaction, ns1:KVS_E10_HotColdSeparation ;
+    ns1:improves ns1:LKV_E15_WriteAmplification, ns1:LKV_E17_Throughput ;
+    ns1:degrades ns1:LKV_E16_ReadAmplification .
+
+ns1:KVS_E4_K2PMapping a <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/K2PMapping>, owl:Thing ;
+    rdfs:label "Key-to-Physical (K2P) Mapping" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/K2PMapping> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Replaces FTL L2P mapping; enables copy-free SSTable compaction via remapping." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification .
+
+ns1:KVS_E5_L2PMapping a <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL>, owl:Thing ;
+    rdfs:label "Logical-to-Physical (L2P) Mapping" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> ;
+    dcterms:source <http://example.org/paper/KVS> .
+
+ns1:KVS_E6_RemappingCompaction a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/RemappingCompaction>, owl:Thing ;
+    rdfs:label "Remapping Compaction" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/RemappingCompaction> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Writes only new metadata pages pointing to existing KV pages; reduces compaction WA by 38%." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification ;
+    ns1:degrades ns1:LKV_E16_ReadAmplification .
+
+ns1:KVS_E7_KeyRangeTree a <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL>, owl:Thing ;
+    rdfs:label "Key-Range Tree (SSTable-level K2P)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    ns1:uses ns1:KVS_E4_K2PMapping .
+
+ns1:KVS_E8_MetadataPage a <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/TranslationPage>, owl:Thing ;
+    rdfs:label "Metadata Page (SSTable)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL/TranslationPage> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Stores PPAs and key ranges of an SSTable's KV pages." .
+
+ns1:KVS_E9_KVPage a <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL>, owl:Thing ;
+    rdfs:label "KV Page (flash page of sorted KV pairs)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/KVFTL> ;
+    dcterms:source <http://example.org/paper/KVS> .
+
+ns1:KVS_E10_HotColdSeparation a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/HotColdSeparation>, owl:Thing ;
+    rdfs:label "Hot-Cold Separation" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/HotColdSeparation> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Writes KV pages from same LSM level into same flash block; reduces GC WA by 14%." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification, ns1:KVS_E13_FlashGarbageCollection .
+
+ns1:KVS_E11_ReadModifyWrite a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/ReadModifyWrite>, owl:Thing ;
+    rdfs:label "Page Read-Modify-Write" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/ReadModifyWrite> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Second-stage WA: partial page updates when FS block < flash page (4KB vs 32KB)." ;
+    ns1:degrades ns1:LKV_E15_WriteAmplification .
+
+ns1:KVS_E12_CascadingWriteAmplification a <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral>, owl:Thing ;
+    rdfs:label "Cascading Write Amplification" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    rdfs:comment "Product of LSM-tree + block-layer + FTL WAs (example: 10 x 1.5 x 3 = 45)." ;
+    ns1:correlatesWith ns1:LKV_E15_WriteAmplification, ns1:KVS_E13_FlashGarbageCollection .
+
+ns1:KVS_E13_FlashGarbageCollection a <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection>, owl:Thing ;
+    rdfs:label "Flash Garbage Collection (FTL)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Operations/GarbageCollection> ;
+    dcterms:source <http://example.org/paper/KVS> ;
+    ns1:degrades ns1:LKV_E15_WriteAmplification .
+
+ns1:KVS_E14_KVInterface a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "KV Interface (store/retrieve/delete/iterate)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/KVS> .
+
+# =====================================================================
+# Paper DOT — Dotori (Duffy et al., PVLDB 2023)
+# =====================================================================
+
+ns1:DOT_E1_Dotori a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Dotori" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Host-side KV store over a KVSSD; provides transactions, snapshots, recovery, range queries." ;
+    ns1:uses ns1:DOT_E2_OAKTree, ns1:DOT_E3_KVSSD_HashTable, ns1:DOT_E9_KVInterface ;
+    ns1:improves ns1:DOT_E16_SpaceAmplification, ns1:LKV_E15_WriteAmplification, ns1:LKV_E17_Throughput ;
+    ns1:hasWorkloadProfile ns1:DOT_E11_RangeQuery .
+
+ns1:DOT_E2_OAKTree a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/OAKTree>, owl:Thing ;
+    rdfs:label "OAK-Tree" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/OAKTree> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Out-of-order Append-Only KVSSD B+tree: sparse per-node log writes without prior read; relies on KV interface to locate logs." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification, ns1:LKV_E17_Throughput ;
+    ns1:operatesUnder ns1:DOT_E9_KVInterface .
+
+ns1:DOT_E3_KVSSD_HashTable a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/HashTable>, owl:Thing ;
+    rdfs:label "Hash-Table KVSSD (Samsung PM983)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/HashTable> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Commercial KVSSD conforming to SNIA KV API; hash-table based; ~66% lower raw IOPS than equivalent block SSD." ;
+    ns1:degrades ns1:DOT_E17_TailLatency ;
+    ns1:correlatesWith ns1:DOT_E15_HashTableCollision .
+
+ns1:DOT_E4_SNIAKVAPI a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "SNIA KV API Standard" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+ns1:DOT_E5_CopyOnWriteBPlusTree a <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/BPlusTree>, owl:Thing ;
+    rdfs:label "Copy-on-Write B+Tree" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/BPlusTree> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Leaf update requires read-modify-write of whole block; high WA on block storage." ;
+    ns1:degrades ns1:LKV_E15_WriteAmplification .
+
+ns1:DOT_E6_ForestDB a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "ForestDB" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    ns1:uses <http://example.org/ssd/taxonomy/SSD/KVSSD/Indexing/BPlusTree> .
+
+ns1:DOT_E7_WiredTiger a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "WiredTiger" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+ns1:DOT_E8_BlockInterface a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Block Interface (contrast)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Mismatch with KV abstraction causes compaction, index persistence, and recovery overheads." ;
+    ns1:degrades ns1:LKV_E15_WriteAmplification, ns1:LKV_E16_ReadAmplification, ns1:DOT_E16_SpaceAmplification .
+
+ns1:DOT_E9_KVInterface a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "KV Interface (SNIA/NVMe KV)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Delegates key search to device; enables sparse index persistence without an auxiliary index." ;
+    ns1:improves ns1:LKV_E15_WriteAmplification, ns1:DOT_E16_SpaceAmplification .
+
+ns1:DOT_E10_IndexPersistence a <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral>, owl:Thing ;
+    rdfs:label "Index Persistence Overhead" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "On block SSDs, persisting index state (e.g. ForestDB) costs ~3.3x over no-persist baseline." ;
+    ns1:degrades ns1:LKV_E17_Throughput .
+
+ns1:DOT_E11_RangeQuery a <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/KeySize>, owl:Thing ;
+    rdfs:label "Range Query Workload" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+ns1:DOT_E12_Snapshot a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Snapshot" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+ns1:DOT_E13_Transaction a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Transaction Support" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+ns1:DOT_E14_Recovery a <http://example.org/ssd/taxonomy/SSD/KVSSD>, owl:Thing ;
+    rdfs:label "Crash Recovery" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "On block KV stores recovery reads slow (45 MB/s ForestDB, 35 MB/s WiredTiger) vs 3100 MB/s raw device." ;
+    ns1:degrades ns1:LKV_E17_Throughput .
+
+ns1:DOT_E15_HashTableCollision a <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral>, owl:Thing ;
+    rdfs:label "Hash-Table Collision (KVSSD)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral> ;
+    dcterms:source <http://example.org/paper/DOT> ;
+    rdfs:comment "Extra in-device hash reads/writes raise tail latency; duplicate-check costs also penalize writes." ;
+    ns1:affectsTailLatency ns1:DOT_E17_TailLatency ;
+    ns1:degrades ns1:LKV_E17_Throughput .
+
+ns1:DOT_E16_SpaceAmplification a <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/SpaceAmplification>, owl:Thing ;
+    rdfs:label "Space Amplification" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/SpaceAmplification> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+ns1:DOT_E17_TailLatency a <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency>, owl:Thing ;
+    rdfs:label "Tail Latency (99.9/99.99 pct)" ;
+    rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency> ;
+    dcterms:source <http://example.org/paper/DOT> .
+
+# ---- Cross-paper linking (KV-SSD ontology-level relations) ---------------
+
+<http://example.org/ssd/taxonomy/SSD/KVSSD> ns1:hasWorkloadProfile
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/ValueSize>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/KeySize>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/ReadWriteRatio>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Workload/AccessSkew> ;
+    ns1:hasPerformanceMetric
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/WriteAmplification>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/ReadAmplification>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/SpaceAmplification>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/TailLatency>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Performance/Throughput> ;
+    ns1:correlatesWith
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/InlineRatio>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/MappingEntryChurn>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/InlineToRegularTransition>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/TranslationPagePressure>,
+        <http://example.org/ssd/taxonomy/SSD/KVSSD/Behavioral/CMTHitRateDynamics> .
