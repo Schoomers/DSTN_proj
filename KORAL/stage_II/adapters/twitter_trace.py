@@ -38,8 +38,15 @@ from typing import Any, Dict, List, Tuple
 try:
     from tqdm import tqdm
 except ImportError:
-    def tqdm(it, **_):
-        return it
+    class tqdm:
+        """Minimal fallback that mimics tqdm's iterable + manual-update use cases."""
+        def __init__(self, iterable=None, total=None, **_):
+            self.iterable = iterable
+        def __iter__(self):
+            return iter(self.iterable or [])
+        def update(self, _n=1): pass
+        def set_postfix_str(self, _s, refresh=False): pass
+        def close(self): pass
 
 
 # Default KVPack frame threshold. KVPack paper Table II / §IV-B:

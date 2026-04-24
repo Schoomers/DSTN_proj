@@ -28,6 +28,7 @@ import tempfile
 import shutil
 import random
 
+print("Running...")
 
 # --- Optional LLM backend (OpenAI) ---
 # try:
@@ -37,15 +38,17 @@ import random
 
 try:
     from ollama_client import OllamaClient as OpenAI
-    from openai import (
-        APIError,
-        APITimeoutError,
-        APIConnectionError,
-        RateLimitError,
-        InternalServerError,
-    )
 except Exception:
     OpenAI = None
+
+# The shim uses requests directly; we no longer need the real openai SDK's
+# exception classes. Stub them to generic Exception so the retry logic still
+# works without importing the heavy openai package at startup.
+class APIError(Exception): pass
+class APITimeoutError(APIError): pass
+class APIConnectionError(APIError): pass
+class RateLimitError(APIError): pass
+class InternalServerError(APIError): pass
 
 
 # --- PDF extraction fallback ---
@@ -612,23 +615,31 @@ def process_paper(
     log.info(f"Created {len(chunks)} chunks")
     
     all_results = []
-    '''for i, chunk in enumerate(chunks, 1):
-        log.info(f"Processing chunk {i}/{len(chunks)}...")
-        try:
-            r = llm.run(chunk, taxonomy_json)
-            all_results.append(r)
-        except Exception as e:
-            log.warning(f"Chunk {i} failed: {e}")
-            continue'''
     from tqdm import tqdm
 
-    for i, chunk in enumerate(tqdm(chunks, desc="Processing chunks"), 1):
+    ok = 0
+    fail = 0
+    pbar = tqdm(
+        total=len(chunks),
+        desc=f"  chunks[{paper_path.name[:28]}]",
+        unit="chunk",
+        dynamic_ncols=True,
+        leave=False,
+    )
+    for i, chunk in enumerate(chunks, 1):
+        pbar.set_postfix_str(f"ok={ok} fail={fail}", refresh=False)
         try:
             r = llm.run(chunk, taxonomy_json)
             all_results.append(r)
+            ok += 1
         except Exception as e:
             log.warning(f"Chunk {i} failed: {e}")
+            fail += 1
             continue
+        finally:
+            pbar.update(1)
+    pbar.set_postfix_str(f"ok={ok} fail={fail}")
+    pbar.close()
     
     merged_result = merge_chunk_results(all_results)
     merged_result = reassign_entity_ids(merged_result)
@@ -708,7 +719,19 @@ def main(
     graphs: List[Graph] = []
     all_new_concepts: List[Dict[str, Any]] = []
 
-    for p in paper_paths:
+    try:
+        from tqdm import tqdm as _tqdm
+    except ImportError:
+        def _tqdm(it, **_): return it
+
+    paper_bar = _tqdm(
+        paper_paths,
+        desc="Stage 1 papers",
+        unit="paper",
+        dynamic_ncols=True,
+    )
+    for p in paper_bar:
+        paper_bar.set_postfix_str(p.name[:48], refresh=False)
         try:
             g, _, proposals = process_paper(p, taxonomy_json, tax_lookup, llm, out_dir)
             graphs.append(g)

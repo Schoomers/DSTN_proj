@@ -21,9 +21,15 @@ import pandas as pd
 
 try:
     from tqdm import tqdm
-except ImportError:  # graceful fallback
-    def tqdm(it, **_):
-        return it
+except ImportError:  # graceful fallback — handles both iterable and total= usage
+    class tqdm:
+        def __init__(self, iterable=None, total=None, **_):
+            self.iterable = iterable
+        def __iter__(self):
+            return iter(self.iterable or [])
+        def update(self, _n=1): pass
+        def set_postfix_str(self, _s, refresh=False): pass
+        def close(self): pass
 
 from stage_II.config import Stage2Config, resolve_path
 from stage_II.features.kv import (
@@ -269,6 +275,9 @@ class KVStage2Runner:
                     "sample_id": sample_id,
                     "task": task,
                     "prompt_terms": terms,
+                    #"prompt_payload": sample_payload,
+                    #"system_prompt": sys_prompt,
+                    #"user_prompt": user,
                     "response_text": resp.text,
                     "response_json": parsed,
                 })
