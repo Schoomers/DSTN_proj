@@ -184,6 +184,12 @@ ns1:E9_WOGC a <http://example.org/ssd/taxonomy/SSD/InternalFirmwareAndLogic/Medi
     rdfs:label "WOGC" ;
     rdfs:isDefinedBy <http://example.org/ssd/taxonomy/SSD/InternalFirmwareAndLogic/MediaManagement/Wear%2520Leveling> .
 
+ns1:affectsLatency a owl:ObjectProperty .
+
+ns1:affectsTailLatency a owl:ObjectProperty .
+
+ns1:affectsThroughput a owl:ObjectProperty .
+
 ns1:axiom_000057bc a owl:Axiom ;
     rdfs:comment "improves rdfs:domain SSD; rdfs:range MetricsHealthAndState/Performance." .
 
@@ -5580,7 +5586,17 @@ ns1:axiom_fffc665f a owl:Axiom ;
 
 ns1:confidence a owl:DatatypeProperty .
 
+ns1:hasAccessSkew a owl:DatatypeProperty .
+
+ns1:hasCacheHitRate a owl:DatatypeProperty .
+
 ns1:hasEnvironment a owl:ObjectProperty .
+
+ns1:hasKeySize a owl:DatatypeProperty .
+
+ns1:hasRequestDistribution a owl:DatatypeProperty .
+
+ns1:hasValueSize a owl:DatatypeProperty .
 
 ns1:object a owl:ObjectProperty .
 
